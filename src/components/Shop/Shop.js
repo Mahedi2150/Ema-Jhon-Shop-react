@@ -1,5 +1,6 @@
 
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { addToDb, getStoredCart } from "../../utilities/fakedb";
 import Cart from "../Cart/Cart";
 import Product from "../Product/Product";
@@ -9,7 +10,7 @@ const Shop = () => {
   const [cart, setCart] = useState([]);
   const [displayProduct, setDisplayProduct] = useState([])
   useEffect(() => {
-    fetch("./products.JSON")
+    fetch("./products.json")
       .then((res) => res.json())
       .then((data) => {
         setProducts(data);
@@ -35,7 +36,17 @@ const Shop = () => {
     }
   }, [products]);
   const hendleAddToCart = (product) => {
-    const newCart = [...cart, product];
+    const exist = cart.find(pd => pd.key === product.key);
+    let newCart = []
+    if (exist) {
+      const rest = cart.filter(pd =>pd.key !== product.key)
+      exist.quantity = exist.quantity + 1;
+      newCart = [...rest,product]
+    } else {
+      product.quantity = 1;
+      newCart = [...cart,product]
+    }
+   
     setCart(newCart);
     // save to localStorage
     addToDb(product.key);
@@ -64,7 +75,11 @@ const Shop = () => {
           ))}
         </div>
         <div className="card-container">
-          <Cart cart={cart}></Cart>
+          <Cart cart={cart}>
+            <Link to="/orderreview" >
+              <button className="btn-regular"> Review Your Order</button>
+            </Link>
+          </Cart>
         </div>
       </div>
     </>
