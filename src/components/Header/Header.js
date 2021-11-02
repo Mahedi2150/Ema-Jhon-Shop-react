@@ -5,9 +5,10 @@ import { NavLink } from 'react-router-dom';
 import useAuth from '../../hooks/useAuth';
 import logo from '../../images/logo.png'
 import "./Header.css"
+
 const Header = () => {
     const logoutIcon = <FontAwesomeIcon icon={faSignOutAlt} />;
-    const {user,logout} = useAuth()
+    const { user, logout } = useAuth()
     return (
         <div className='header'>
             <img className='logo' src={logo} alt="" />
@@ -15,10 +16,14 @@ const Header = () => {
                 <NavLink to="/shop">Shop</NavLink>
                 <NavLink to="/orderreview">Order Review</NavLink>
                 <NavLink to="/inventory">Manage Inventory</NavLink>
-               {user.email&& <span style={{color:'white'}}>Hello : {user.displayName } </span>}
-                {user.email?
-                <button onClick={logout} style={{cursor:'pointer'}}>{logoutIcon}</button>:
+                {user.email &&
+                    <NavLink to="/orders">Orders</NavLink>
+                }
+                {user.email && <span style={{ color: 'white' }}>Hello : {user.displayName} </span>}
+                {user.email ?
+                    <button onClick={logout} style={{ cursor: 'pointer' }}>{logoutIcon}</button> :
                     <NavLink to="/login">Login</NavLink>}
+
             </nav>
         </div>
     );
